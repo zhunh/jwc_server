@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const condition = require('../models/ConditionsOfMajors')
 const auth = require("../middlewares/auth")
+let funcs = require('../config/formatResponse')
 
 // 添加
 router.get("/add", (req, res) => {
@@ -21,15 +22,9 @@ router.get("/add", (req, res) => {
         remarks: 'test'
     });
     cd.save().then(() => {
-        res.json({
-            code: 0,
-            msg: "ok"
-        })
+        res.json(funcs.sucRes01())
     }).catch(err => {
-        res.json({
-            code: 0,
-            msg: err.message
-        })
+        res.json(funcs.errRes(err))
     })
 });
 // 查询
@@ -80,13 +75,17 @@ router.get('/query', auth, async (req, res, next) => {
 
     // data 是查询出来的数据，是数组格式
     let datas = await condition.find(queryCondition).skip(skipNum).limit(pageSize)
-    res.send({
-        code: 0,
-        msg: 'ok',
-        data: {
-            total: total,
-            result: datas
-        }
-    })
+    res.send(funcs.sucRes01({
+        total: total,
+        result: datas
+    }))
+    // {
+    //     code: 0,
+    //     msg: 'ok',
+    //     data: {
+    //         total: total,
+    //         result: datas
+    //     }
+    // }
 })
 module.exports = router;

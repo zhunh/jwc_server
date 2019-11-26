@@ -14,6 +14,10 @@ var employmentRouter = require('./routes/EmploymentRate');
 var majorConvertRouter = require('./routes/MajorConvertRate');
 var postgraduateRouter = require('./routes/PostgraduateRate');
 var summaryRouter = require('./routes/Summary')
+var teachingProjectProvinceRouter = require('./routes/TeachingProjectProvince')
+var researchPaperRouter = require('./routes/ResearchPaper')
+var teachingAwardRouter = require('./routes/TeachingAward')
+var engineeringProject = require('./routes/EngineeringProject')
 
 var app = express();
 
@@ -52,6 +56,10 @@ app.use('/mcr', majorConvertRouter)
 app.use('/pr', postgraduateRouter)
 app.use('/er', employmentRouter)
 app.use('/summary', summaryRouter)
+app.use('/tpp', teachingProjectProvinceRouter)
+app.use('/rp', researchPaperRouter)
+app.use('/ta', teachingAwardRouter)
+app.use('/ep', engineeringProject)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

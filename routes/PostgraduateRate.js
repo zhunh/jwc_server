@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const PR = require('../models/PostgraduateRate')
 const auth = require("../middlewares/auth")
+let R = require('../config/formatResponse')
 // 添加
 router.get("/add", (req, res) => {
     let er = new PR({
@@ -16,16 +17,9 @@ router.get("/add", (req, res) => {
         remarks: 'testadd'
     });
     er.save().then((re) => {
-        res.json({
-            code: 0,
-            msg: "ok",
-            result: re
-        })
+        res.json(R.sucRes01(re))
     }).catch(err => {
-        res.json({
-            code: 0,
-            msg: err.message
-        })
+        res.json(R.errRes(err))
     })
 });
 // 查询
@@ -76,13 +70,9 @@ router.get('/query', auth, async (req, res, next) => {
 
     // data 是查询出来的数据，是数组格式
     let datas = await PR.find(queryCondition).skip(skipNum).limit(pageSize)
-    res.send({
-        code: 0,
-        msg: 'ok',
-        data: {
-            total: total,
-            result: datas
-        }
-    })
+    res.send(R.sucRes01({
+        total: total,
+        result: datas
+    }))
 })
 module.exports = router;

@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const auth = require("../middlewares/auth")
 const condition = require('../models/ConditionsOfMajors')
-
+let funcs = require('../config/formatResponse')
 /**
  * 查询所有数据
  * 条件查询:
@@ -15,10 +15,16 @@ router.get('/query', auth, async (req, res, next) => {
     let pageSize = parseInt(req.query.pageSize)
     let currentPage = parseInt(req.query.currentPage)
     let skipNum = pageSize * (currentPage - 1)
-    let total = await condition.find().count()
+    let selectYear = req.query.selectYear
+    if (selectYear == 'all') {
+        selectYear = /./
+    }
+    let total = await condition.find({
+        year: 2019
+    }).count()
     // data 是查询出来的数据，是数组格式
     //let data = await condition.find().skip(skipNum).limit(pageSize)
-    let data = await condition.aggregate([
+    let pipeArr = [
         //年份限制 2019
         {
             $match: {
@@ -53,7 +59,7 @@ router.get('/query', auth, async (req, res, next) => {
         // 限制就业率统计的年份
         {
             $match: {
-                'er.year': '2017'
+                'er.year': selectYear
             }
         },
         // 设置子文档输出结构
@@ -83,7 +89,7 @@ router.get('/query', auth, async (req, res, next) => {
         },
         {
             $match: {
-                'pr.year': '2017'
+                'pr.year': selectYear
             }
         },
         {
@@ -112,7 +118,7 @@ router.get('/query', auth, async (req, res, next) => {
         },
         {
             $match: {
-                'mcr.year': '2017'
+                'mcr.year': selectYear
             }
         },
         {
@@ -127,27 +133,135 @@ router.get('/query', auth, async (req, res, next) => {
                 'mcr.__v': 0
             }
         },
+        // 和教改论文连表
+        {
+            $lookup: {
+                'from': 'research_paper',
+                'localField': 'major_name',
+                'foreignField': 'major_name',
+                'as': 'rp'
+            }
+        },
+        {
+            $unwind: '$rp'
+        },
+        {
+            $match: {
+                'rp.year': selectYear
+            }
+        },
+        {
+            $project: {
+                'rp._id': 0,
+                'rp.major_code': 0,
+                'rp.major_name': 0,
+                'rp.post_time': 0,
+                'rp.poster': 0,
+                'rp.remarks': 0,
+                'rp.__v': 0
+            }
+        },
+        // 和主持省级以上教研项目连表
+        {
+            $lookup: {
+                'from': 'teaching_project_province',
+                'localField': 'major_name',
+                'foreignField': 'major_name',
+                'as': 'tpp'
+            }
+        },
+        {
+            $unwind: '$tpp'
+        },
+        {
+            $match: {
+                'tpp.year': selectYear
+            }
+        },
+        {
+            $project: {
+                'tpp._id': 0,
+                'tpp.major_code': 0,
+                'tpp.major_name': 0,
+                'tpp.post_time': 0,
+                'tpp.poster': 0,
+                'tpp.remarks': 0,
+                'tpp.__v': 0
+            }
+        },
+        // 和主持省级以上教学工程项目连表
+        {
+            $lookup: {
+                'from': 'engineering_project',
+                'localField': 'major_name',
+                'foreignField': 'major_name',
+                'as': 'ep'
+            }
+        },
+        {
+            $unwind: '$ep'
+        },
+        // {
+        //     $match: {
+        //         'ep.year': selectYear
+        //     }
+        // },
+        {
+            $project: {
+                'ep._id': 0,
+                'ep.major_code': 0,
+                'ep.major_name': 0,
+                'ep.post_time': 0,
+                'ep.poster': 0,
+                'ep.remarks': 0,
+                'ep.__v': 0
+            }
+        },
+        // 和省级以上教学成果奖连表
+        {
+            $lookup: {
+                'from': 'teaching_award',
+                'localField': 'major_name',
+                'foreignField': 'major_name',
+                'as': 'ta'
+            }
+        },
+        {
+            $unwind: '$ta'
+        },
+        // {
+        //     $match: {
+        //         'ta.year': selectYear
+        //     }
+        // },
+        {
+            $project: {
+                'ta._id': 0,
+                'ta.major_code': 0,
+                'ta.major_name': 0,
+                'ta.post_time': 0,
+                'ta.poster': 0,
+                'ta.remarks': 0,
+                'ta.__v': 0
+            }
+        },
         {
             $skip: skipNum
         },
         {
             $limit: pageSize
         }
-    ]);
+    ];
+    let data = await condition.aggregate(pipeArr);
     //对数据处理
     // data.forEach((doc)=>{
     //     doc.faculty = doc.teacher_num
     // })
-
     // 返回数据
-    res.send({
-        code: 0,
-        msg: 'ok',
-        data: {
-            total: total,
-            result: data
-        }
-    })
+    res.send(funcs.sucRes01({
+        total: total,
+        result: data
+    }))
 })
 
 module.exports = router;

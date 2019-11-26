@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const auth = require("../../middlewares/auth")
 var MJ = require('../../models/MajorBasicInfo')
+let R = require('../../config/formatResponse')
 // 添加
 router.get('/add', function (req, res, next) {
     let majorinfo = new MJ({
@@ -26,16 +27,10 @@ router.get('/add', function (req, res, next) {
     majorinfo.save()
         .then(() => {
             //添加成功
-            res.send({
-                code: 0,
-                msg: 'ok'
-            })
+            res.send(R.sucRes02())
         })
         .catch(err => {
-            res.send({
-                code: -1,
-                msg: err.message
-            })
+            res.send(R.errRes(err))
         })
 });
 /**
@@ -62,14 +57,10 @@ router.get('/query', auth, async (req, res, next) => {
     let total = await MJ.find(queryCondition).count()
     // data 是查询出来的数据，是数组格式
     let data = await MJ.find(queryCondition).skip(skipNum).limit(pageSize)
-    res.send({
-        code: 0,
-        msg: 'ok',
-        data: {
-            total: total,
-            result: data
-        }
-    })
+    res.send(R.sucRes01({
+        total: total,
+        result: data
+    }))
 })
 // 修改专业名称
 router.post('/update', function (req, res, next) {
@@ -83,16 +74,10 @@ router.post('/update', function (req, res, next) {
         })
         .then(data => {
             console.log(data);
-            res.send({
-                code: 0,
-                msg: data
-            })
+            res.send(R.sucRes01(data))
         })
         .catch(err => {
-            res.send({
-                code: -1,
-                msg: err.message
-            })
+            res.send(R.errRes(err))
         });
 })
 // 删除
@@ -102,10 +87,7 @@ router.post('/delete', async (req, res) => {
     // console.log(req.body.ids);
     // 2.删除
     if (idArray === undefined || idArray.length == 0) {
-        res.send({
-            code: -1,
-            msg: '没有要删除的ID'
-        });
+        res.send(R.sucRes03('没有要删除的id'));
         return
     }
     for (i = 0; i < idArray.length - 1; i++) {
@@ -128,10 +110,7 @@ router.post('/delete', async (req, res) => {
     //         }
     //     }
     // });
-    res.send({
-        code: 0,
-        msg: '删除成功'
-    });
+    res.send(R.sucRes03("删除成功"));
     // MJ.deleteOne({
     //         _id: id
     //     })
@@ -161,10 +140,7 @@ router.post('/delete', async (req, res) => {
 router.post('/po', function (req, res, next) {
     console.log(req.body);
     console.log(req.body.id);
-    res.send({
-        code: '1111',
-        msg: 'ok'
-    })
+    res.send(R.sucRes02())
 });
 
 module.exports = router;
