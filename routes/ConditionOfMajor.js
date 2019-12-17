@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const button = require('../middlewares/existCheck')
 const condition = require('../models/ConditionsOfMajors')
 const auth = require("../middlewares/auth")
 let funcs = require('../config/formatResponse')
-
+let R = require('../config/formatResponse')
 // 添加
-router.get("/add", (req, res) => {
+router.get("/addTestData", (req, res) => {
     let cd = new condition({
         // major_name
         major_name: "区块链",
@@ -26,6 +27,16 @@ router.get("/add", (req, res) => {
     }).catch(err => {
         res.json(funcs.errRes(err))
     })
+});
+// 添加
+router.post("/add", button.cdCheckExist, (req, res) => {
+    let cd = new condition(req.body)
+    console.log(cd)
+    cd.save().then((re) => {
+        res.json(R.sucRes03("添加成功"))
+    }).catch(err => {
+        res.json(R.errRes(err))
+    });
 });
 // 查询
 // router.get('/query', (req, res) => {

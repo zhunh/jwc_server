@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const MCR = require('../models/MajorConvertRate')
+const button = require('../middlewares/existCheck')
 const auth = require("../middlewares/auth")
 let R = require('../config/formatResponse')
 // 添加
-router.get("/add", (req, res) => {
+router.get("/addTestData", (req, res) => {
     let er = new MCR({
         // major_name
         major_name: "区块链",
@@ -21,6 +22,18 @@ router.get("/add", (req, res) => {
     }).catch(err => {
         res.json(R.errRes(err))
     })
+});
+//添加
+router.post("/add", button.mcrCheckExist, (req, res) => {
+    let er = new MCR({
+        ...req.body
+    })
+    console.log(er)
+    er.save().then((re) => {
+        res.json(R.sucRes03("调剂率添加成功"))
+    }).catch(err => {
+        res.json(R.errRes(err))
+    });
 });
 // 查询
 // router.get('/query', (req, res) => {

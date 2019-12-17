@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router();
 const ER = require('../models/EmploymentRate')
 const auth = require("../middlewares/auth")
+const button = require('../middlewares/existCheck')
 const sql = require("../config/sql")
 let R = require('../config/formatResponse')
-// 添加
-router.get("/add", (req, res) => {
+// 添加测试数据
+router.get("/addTestData", (req, res) => {
     let er = new ER({
         // major_name
         major_name: "区块链",
@@ -19,6 +20,22 @@ router.get("/add", (req, res) => {
     });
     er.save().then((re) => {
         res.json(R.sucRes03(re))
+    }).catch(err => {
+        res.json(R.errRes(err))
+    });
+});
+// 添加
+router.post("/add", button.erCheckExist, (req, res) => {
+    let er = new ER({
+        ...req.body
+    })
+    /**
+     * 检查一下该专业该年份是否存在记录
+     * 存在就不允许增加该记录
+     */
+    console.log(er)
+    er.save().then((re) => {
+        res.json(R.sucRes03("就业率添加成功"))
     }).catch(err => {
         res.json(R.errRes(err))
     });

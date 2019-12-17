@@ -30,7 +30,7 @@ let schema = new db.Schema({
     },
     remarks: {
         type: String,
-        required: true
+        required: false
     }
 })
 

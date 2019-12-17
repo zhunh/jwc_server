@@ -10,8 +10,8 @@ let MCR = new db.Schema({
         required: true
     },
     major_convert_count: {
-        type: Number,
-        required: true
+        type: String,
+        required: false
     },
     major_convert_rate: {
         type: String,
@@ -31,7 +31,7 @@ let MCR = new db.Schema({
     },
     remarks: {
         type: String,
-        required: true
+        required: false
     }
 })
 

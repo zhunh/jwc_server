@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const TPP = require('../models/TeachingProjectProvince')
+const button = require('../middlewares/existCheck')
 const auth = require("../middlewares/auth")
 let R = require('../config/formatResponse')
 // 添加
-router.get("/add", (req, res) => {
+router.get("/addTestData", (req, res) => {
     let tpp = new TPP({
         // major_name
         major_name: "区块链",
@@ -20,6 +21,18 @@ router.get("/add", (req, res) => {
     }).catch(err => {
         res.json(R.errRes(err))
     })
+});
+// 添加
+router.post("/add", button.tpCheckExist, (req, res) => {
+    let er = new TPP({
+        ...req.body
+    })
+    console.log(er)
+    er.save().then((re) => {
+        res.json(R.sucRes03("省级教研项目添加成功"))
+    }).catch(err => {
+        res.json(R.errRes(err))
+    });
 });
 /**
  * 查询所有数据

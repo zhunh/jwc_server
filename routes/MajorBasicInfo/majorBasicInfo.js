@@ -4,7 +4,7 @@ const auth = require("../../middlewares/auth")
 var MJ = require('../../models/MajorBasicInfo')
 let R = require('../../config/formatResponse')
 // 添加
-router.get('/add', function (req, res, next) {
+router.get('/addTestData', function (req, res, next) {
     let majorinfo = new MJ({
         post_year: 2019,
         major_code_school: 123,
@@ -134,6 +134,19 @@ router.post('/delete', async (req, res) => {
 // router.post('/', (req, res) => {
 //     MJ.deleteMany()
 // });
+/**
+ * 查询专业数组，作为前端select
+ */
+router.get('/majorSet', function (req, res, next) {
+    MJ.find({}, {
+        major_name_school: 1,
+        major_code_school: 1
+    }).then((re) => {
+        res.json(R.sucRes01(re))
+    }).catch((err) => {
+        res.json(R.errRes(err))
+    })
+});
 /**
  * test
  */

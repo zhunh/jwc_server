@@ -9,7 +9,7 @@ router.get('/', function (req, res, next) {
   res.send('respond with a resource');
 });
 
-router.post('/addUser', auth, (req, res, next) => {
+router.post('/addUser', (req, res, next) => {
   let userName = req.body.username
   let password = req.body.password
   console.log(req.body);
@@ -38,7 +38,9 @@ router.post('/login', async (req, res) => {
   let password = req.body.password
   console.log(req.body);
 
-  let data = await User.findOne({ username })
+  let data = await User.findOne({
+    username
+  })
   if (data) {
     console.log('fing user');
 
@@ -47,12 +49,10 @@ router.post('/login', async (req, res) => {
       console.log('auth sucs');
 
       // 1.生成一个token令牌
-      const token = jwt.sign(
-        {
+      const token = jwt.sign({
           userId: data._id
         },
-        "jwc_token",
-        {
+        "jwc_token", {
           expiresIn: "1h"
         }
       );

@@ -11,7 +11,7 @@ let funcs = require('../config/formatResponse')
  * currentPage 当前页，作为查询条件
  */
 router.get('/query', auth, async (req, res, next) => {
-    console.log(req.query);
+    // console.log(req.query);
     let pageSize = parseInt(req.query.pageSize)
     let currentPage = parseInt(req.query.currentPage)
     let skipNum = pageSize * (currentPage - 1)
@@ -19,12 +19,10 @@ router.get('/query', auth, async (req, res, next) => {
     if (selectYear == 'all') {
         selectYear = /./
     }
-    let total = await condition.find({
-        year: 2019
-    }).count()
+
     // data 是查询出来的数据，是数组格式
     //let data = await condition.find().skip(skipNum).limit(pageSize)
-    let pipeArr = [
+    var pipeArr = [
         //年份限制 2019
         {
             $match: {
@@ -59,7 +57,7 @@ router.get('/query', auth, async (req, res, next) => {
         // 限制就业率统计的年份
         {
             $match: {
-                'er.year': selectYear
+                'er.year': '2018'
             }
         },
         // 设置子文档输出结构
@@ -89,7 +87,7 @@ router.get('/query', auth, async (req, res, next) => {
         },
         {
             $match: {
-                'pr.year': selectYear
+                'pr.year': '2018'
             }
         },
         {
@@ -118,7 +116,7 @@ router.get('/query', auth, async (req, res, next) => {
         },
         {
             $match: {
-                'mcr.year': selectYear
+                'mcr.year': '2018'
             }
         },
         {
@@ -147,7 +145,7 @@ router.get('/query', auth, async (req, res, next) => {
         },
         {
             $match: {
-                'rp.year': selectYear
+                'rp.year': '2018'
             }
         },
         {
@@ -175,7 +173,7 @@ router.get('/query', auth, async (req, res, next) => {
         },
         {
             $match: {
-                'tpp.year': selectYear
+                'tpp.year': '2018'
             }
         },
         {
@@ -201,11 +199,11 @@ router.get('/query', auth, async (req, res, next) => {
         {
             $unwind: '$ep'
         },
-        // {
-        //     $match: {
-        //         'ep.year': selectYear
-        //     }
-        // },
+        {
+            $match: {
+                'ep.year': '2018'
+            }
+        },
         {
             $project: {
                 'ep._id': 0,
@@ -229,37 +227,31 @@ router.get('/query', auth, async (req, res, next) => {
         {
             $unwind: '$ta'
         },
-        // {
-        //     $match: {
-        //         'ta.year': selectYear
-        //     }
-        // },
         {
-            $project: {
-                'ta._id': 0,
-                'ta.major_code': 0,
-                'ta.major_name': 0,
-                'ta.post_time': 0,
-                'ta.poster': 0,
-                'ta.remarks': 0,
-                'ta.__v': 0
+            $match: {
+                'ta.year': '2018'
             }
         },
-        {
-            $skip: skipNum
-        },
-        {
-            $limit: pageSize
-        }
+        // { $skip : 5 },
+        // { $limit : 5 }
     ];
+    let total = await condition.aggregate(pipeArr);
+    console.log(total.length);
+
+    pipeArr.push({
+        $skip: skipNum
+    }, {
+        $limit: pageSize
+    })
     let data = await condition.aggregate(pipeArr);
+    console.log(data.length)
     //对数据处理
     // data.forEach((doc)=>{
     //     doc.faculty = doc.teacher_num
     // })
     // 返回数据
     res.send(funcs.sucRes01({
-        total: total,
+        total: total.length,
         result: data
     }))
 })

@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const PR = require('../models/PostgraduateRate')
+const button = require('../middlewares/existCheck')
 const auth = require("../middlewares/auth")
 let R = require('../config/formatResponse')
 // 添加
-router.get("/add", (req, res) => {
+router.get("/addTestData", (req, res) => {
     let er = new PR({
         // major_name
         major_name: "区块链",
@@ -21,6 +22,18 @@ router.get("/add", (req, res) => {
     }).catch(err => {
         res.json(R.errRes(err))
     })
+});
+// 添加
+router.post("/add", button.prCheckExist, (req, res) => {
+    let er = new PR({
+        ...req.body
+    })
+    console.log(er)
+    er.save().then((re) => {
+        res.json(R.sucRes03("考研率添加成功"))
+    }).catch(err => {
+        res.json(R.errRes(err))
+    });
 });
 // 查询
 // router.get('/query', (req, res) => {

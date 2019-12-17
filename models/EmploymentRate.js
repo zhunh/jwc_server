@@ -10,8 +10,8 @@ let ER = new db.Schema({
         required: true
     },
     employment_count: {
-        type: Number,
-        required: true
+        type: String,
+        required: false //暂定false
     },
     employment_rate: {
         type: String,
@@ -31,8 +31,12 @@ let ER = new db.Schema({
     },
     remarks: {
         type: String,
-        required: true
+        required: false
     }
 })
+
+// ER.pre('save',()=>{
+//     ER.
+// })
 
 module.exports = db.model('employmentrate', ER, 'employment_rate')

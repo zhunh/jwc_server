@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/User/users');
-var majorRouter = require('./routes/MajorBasicInfo/add');
+var majorRouter = require('./routes/MajorBasicInfo/majorBasicInfo');
 var conditionRouter = require('./routes/ConditionOfMajor');
 var employmentRouter = require('./routes/EmploymentRate');
 var majorConvertRouter = require('./routes/MajorConvertRate');
@@ -18,6 +18,7 @@ var teachingProjectProvinceRouter = require('./routes/TeachingProjectProvince')
 var researchPaperRouter = require('./routes/ResearchPaper')
 var teachingAwardRouter = require('./routes/TeachingAward')
 var engineeringProject = require('./routes/EngineeringProject')
+var excelImport = require('./routes/ExcelImport')
 
 var app = express();
 
@@ -60,6 +61,7 @@ app.use('/tpp', teachingProjectProvinceRouter)
 app.use('/rp', researchPaperRouter)
 app.use('/ta', teachingAwardRouter)
 app.use('/ep', engineeringProject)
+app.use('/import', excelImport)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
