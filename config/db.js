@@ -24,26 +24,20 @@ mongoose
     .catch(err => {
         console.log("数据库连接失败", err.message)
     })
-mongoose.connection.on('open', async function () {
-    mongoose.connection.db.listCollections().toArray(function (err, names) {
-        if (err) {
-            console.log(err);
-        } else {
-            names.forEach(function (e, i, a) {
-                console.log("--->>", e.name);
-                console.log("--->>", e.count());
-                console.log("--->>", i);
-                console.log("--->>", a);
-            });
-        }
-    });
-    // let cls = mongoose.connection.db.listCollections()
-    // console.log(cls)
-    // cls.array.forEach(element => {
-    //     console.log(element.count())
-    // });
-    // console.log(cls[0])
-});
+// mongoose.connection.on('open', async function () {
+//     mongoose.connection.db.listCollections().toArray(function (err, names) {
+//         if (err) {
+//             console.log(err);
+//         } else {
+//             names.forEach(function (e, i, a) {
+//                 console.log("--->>", e.name);
+//                 // console.log("--->>", e.count());
+//                 console.log("--->>", i);
+//                 console.log("--->>", a);
+//             });
+//         }
+//     });
+// });
 // mongoose.connection.db.listCollections({
 //     nameOnly: true
 // }).then(re => {

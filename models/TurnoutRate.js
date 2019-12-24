@@ -1,8 +1,8 @@
 const db = require('../config/db')
 /**
- * 就业率
+ * 转出率
  */
-let PR = new db.Schema({
+let TR = new db.Schema({
     major_name: {
         type: String,
         required: true
@@ -11,11 +11,11 @@ let PR = new db.Schema({
         type: String,
         required: true
     },
-    postgraduate_count: {
+    turnout_count: {
         type: String,
         required: false
     },
-    postgraduate_rate: {
+    turnout_rate: {
         type: String,
         required: true
     },
@@ -37,4 +37,4 @@ let PR = new db.Schema({
     }
 })
 
-module.exports = db.model('postgraduaterate', PR, 'postgraduate_rate')
+module.exports = db.model('turnout_rate', TR, 'turnout_rate')

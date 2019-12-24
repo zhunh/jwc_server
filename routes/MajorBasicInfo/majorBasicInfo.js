@@ -41,7 +41,6 @@ router.get('/addTestData', function (req, res, next) {
  * currentPage 当前页，作为查询条件
  */
 router.get('/query', auth, async (req, res, next) => {
-    console.log(req.query);
     let obj = {
         'major_name': eval('/' + req.query.key + '/'),
     }
@@ -64,7 +63,6 @@ router.get('/query', auth, async (req, res, next) => {
 })
 // 修改专业名称
 router.post('/update', function (req, res, next) {
-    console.log(req.body)
     let id = req.body.id;
     let mjname = req.body.mjname;
     MJ.updateOne({
@@ -92,11 +90,9 @@ router.post('/delete', async (req, res) => {
     }
     for (i = 0; i < idArray.length - 1; i++) {
         if (idArray[i] !== null) {
-            console.log(idArray[i]);
             result = await MJ.deleteOne({
                 _id: idArray[i]
             })
-            console.log(result)
         }
     }
     // idArray.forEach(element => {

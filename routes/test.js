@@ -37,3 +37,22 @@ console.log(db.STATES)
 //     })
 //     console.log(collections)
 // });
+
+let doc = {
+    "_id": "5df7107e4fc3903ef0d760f1",
+    "major_name": "环境工程",
+    "major_code": 82502,
+    "employment_count": 99,
+    "employment_rate": 84.21,
+    "year": "2016",
+    "post_time": "2019/11/10",
+    "poster": "zhu123",
+    "remarks": "表格导入"
+}
+ER.updateOne({
+    _id: doc._id
+}, doc).then(re => {
+    console.log(re)
+}).catch(err => {
+    console.log(err)
+})

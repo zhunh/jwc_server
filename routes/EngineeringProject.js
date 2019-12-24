@@ -27,7 +27,6 @@ router.post("/add", button.epCheckExist, (req, res) => {
     let er = new EP({
         ...req.body
     })
-    console.log(er)
     er.save().then((re) => {
         res.json(R.sucRes03("教学工程项目添加成功"))
     }).catch(err => {
@@ -42,7 +41,6 @@ router.post("/add", button.epCheckExist, (req, res) => {
  * currentPage 当前页，作为查询条件
  */
 router.get('/query', auth, async (req, res, next) => {
-    // console.log(req.query);
     let obj = {
         'major_name': eval('/' + req.query.key + '/'),
     }
@@ -52,7 +50,6 @@ router.get('/query', auth, async (req, res, next) => {
     let selectYear = req.query.selectYear
     let queryCondition = {};
     if (selectYear !== 'all') {
-        console.log(selectYear)
         queryCondition.year = selectYear
     }
     if (!req.query.key) {
@@ -71,5 +68,27 @@ router.get('/query', auth, async (req, res, next) => {
         total: total,
         result: datas
     }))
+})
+// 修改
+router.post('/update', (req, res) => {
+    let doc = req.body
+    EP.updateOne({
+        _id: doc._id
+    }, doc).then(re => {
+        res.send(R.sucRes03('修改成功'))
+    }).catch(err => {
+        res.send(R.errRes(err))
+    })
+})
+// 删除
+router.get('/delete', (req, res) => {
+    let id = req.query.id
+    EP.deleteOne({
+        _id: id
+    }).then(re => {
+        res.json(R.sucRes03('删除成功'))
+    }).catch(err => {
+        res.send(R.errRes(err))
+    })
 })
 module.exports = router

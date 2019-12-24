@@ -1,8 +1,9 @@
-const db = require('../config/db')
 /**
- * 就业率
+ * 学生论文发明专利
  */
-let PR = new db.Schema({
+const db = require('../config/db')
+
+let schema = new db.Schema({
     major_name: {
         type: String,
         required: true
@@ -11,11 +12,7 @@ let PR = new db.Schema({
         type: String,
         required: true
     },
-    postgraduate_count: {
-        type: String,
-        required: false
-    },
-    postgraduate_rate: {
+    paper_patent: {
         type: String,
         required: true
     },
@@ -37,4 +34,4 @@ let PR = new db.Schema({
     }
 })
 
-module.exports = db.model('postgraduaterate', PR, 'postgraduate_rate')
+module.exports = db.model("student_paper_patent", schema, "student_paper_patent")

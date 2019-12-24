@@ -61,4 +61,4 @@ let condition = new db.Schema({
     }
 })
 
-module.exports = db.model('conditionsofmajor', condition, 'conditionsofmajors')
+module.exports = db.model('conditionsofmajor', condition, 'condition_of_major')

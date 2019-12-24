@@ -25,11 +25,10 @@ router.get("/addTestData", (req, res) => {
 });
 //添加
 router.post("/add", button.mcrCheckExist, (req, res) => {
-    let er = new MCR({
+    let mcr = new MCR({
         ...req.body
     })
-    console.log(er)
-    er.save().then((re) => {
+    mcr.save().then((re) => {
         res.json(R.sucRes03("调剂率添加成功"))
     }).catch(err => {
         res.json(R.errRes(err))
@@ -50,6 +49,7 @@ router.post("/add", button.mcrCheckExist, (req, res) => {
 //         })
 //     })
 // })
+// 分页查询
 router.get('/query', auth, async (req, res, next) => {
     // console.log(req.query);
     let obj = {
@@ -80,5 +80,27 @@ router.get('/query', auth, async (req, res, next) => {
         total: total,
         result: datas
     }))
+})
+// 修改
+router.post('/update', (req, res) => {
+    let doc = req.body
+    MCR.updateOne({
+        _id: doc._id
+    }, doc).then(re => {
+        res.send(R.sucRes03('修改成功'))
+    }).catch(err => {
+        res.send(R.errRes(err))
+    })
+})
+// 删除
+router.get('/delete', (req, res) => {
+    let id = req.query.id
+    MCR.deleteOne({
+        _id: id
+    }).then(re => {
+        res.json(R.sucRes03('删除成功'))
+    }).catch(err => {
+        res.send(R.errRes(err))
+    })
 })
 module.exports = router;

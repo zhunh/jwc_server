@@ -1,8 +1,8 @@
 const db = require('../config/db')
 /**
- * 就业率
+ * 学生学科竞赛（省级三等奖以上）
  */
-let PR = new db.Schema({
+let schema = new db.Schema({
     major_name: {
         type: String,
         required: true
@@ -11,11 +11,7 @@ let PR = new db.Schema({
         type: String,
         required: true
     },
-    postgraduate_count: {
-        type: String,
-        required: false
-    },
-    postgraduate_rate: {
+    course_contest: {
         type: String,
         required: true
     },
@@ -23,18 +19,14 @@ let PR = new db.Schema({
         type: String,
         required: true
     },
-    post_time: {
+    teacher: {
         type: String,
         required: true
     },
-    poster: {
+    publish_time: {
         type: String,
         required: true
-    },
-    remarks: {
-        type: String,
-        required: false
     }
 })
 
-module.exports = db.model('postgraduaterate', PR, 'postgraduate_rate')
+module.exports = db.model("student_course_contest", schema, "student_course_contest")

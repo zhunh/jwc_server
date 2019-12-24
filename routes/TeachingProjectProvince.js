@@ -23,7 +23,7 @@ router.get("/addTestData", (req, res) => {
     })
 });
 // 添加
-router.post("/add", button.tpCheckExist, (req, res) => {
+router.post("/add", auth, button.tpCheckExist, (req, res) => {
     let er = new TPP({
         ...req.body
     })
@@ -71,5 +71,27 @@ router.get('/query', auth, async (req, res, next) => {
         total: total,
         result: datas
     }))
+})
+// 修改
+router.post('/update', auth, (req, res) => {
+    let doc = req.body
+    TPP.updateOne({
+        _id: doc._id
+    }, doc).then(re => {
+        res.send(R.sucRes03('修改成功'))
+    }).catch(err => {
+        res.send(R.errRes(err))
+    })
+})
+// 删除
+router.get('/delete', auth, (req, res) => {
+    let id = req.query.id
+    TPP.deleteOne({
+        _id: id
+    }).then(re => {
+        res.json(R.sucRes03('删除成功'))
+    }).catch(err => {
+        res.send(R.errRes(err))
+    })
 })
 module.exports = router

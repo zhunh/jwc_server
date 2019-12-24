@@ -96,5 +96,5 @@ const schema = new db.Schema({
 //3.基于schema生成model对象
 // const model = db.model("majorBasicInfo",schema)
 // module.exports = model
-module.exports = db.model("MajorBasicInfo", schema, "MajorBasicInfos")
+module.exports = db.model("MajorBasicInfo", schema, "major_basic_info")
 //数据库中的表名是根据 db.model 第一个参数的复数形式来确定的,或者第三个参数

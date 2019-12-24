@@ -29,30 +29,14 @@ router.get("/addTestData", (req, res) => {
     })
 });
 // 添加
-router.post("/add", button.cdCheckExist, (req, res) => {
+router.post("/add", auth, button.cdCheckExist, (req, res) => {
     let cd = new condition(req.body)
-    console.log(cd)
     cd.save().then((re) => {
         res.json(R.sucRes03("添加成功"))
     }).catch(err => {
         res.json(R.errRes(err))
     });
 });
-// 查询
-// router.get('/query', (req, res) => {
-//     condition.find().then((data) => {
-//         res.send({
-//             code: 0,
-//             msg: 'ok',
-//             datas: data
-//         })
-//     }).catch((err) => {
-//         res.send({
-//             code: 0,
-//             msg: err.message
-//         })
-//     })
-// })
 /**
  * 查询所有数据
  * 条件查询:
@@ -90,13 +74,27 @@ router.get('/query', auth, async (req, res, next) => {
         total: total,
         result: datas
     }))
-    // {
-    //     code: 0,
-    //     msg: 'ok',
-    //     data: {
-    //         total: total,
-    //         result: datas
-    //     }
-    // }
+})
+// 修改
+router.post('/update', auth, (req, res) => {
+    let doc = req.body
+    condition.updateOne({
+        _id: doc._id
+    }, doc).then(re => {
+        res.send(R.sucRes03('修改成功'))
+    }).catch(err => {
+        res.send(R.errRes(err))
+    })
+})
+// 删除
+router.get('/delete', auth, (req, res) => {
+    let id = req.query.id
+    condition.deleteOne({
+        _id: id
+    }).then(re => {
+        res.json(R.sucRes03('删除成功'))
+    }).catch(err => {
+        res.send(R.errRes(err))
+    })
 })
 module.exports = router;

@@ -24,11 +24,10 @@ router.get("/addTestData", (req, res) => {
 });
 // 添加
 router.post("/add", button.rpCheckExist, (req, res) => {
-    let er = new RP({
+    let rp = new RP({
         ...req.body
     })
-    console.log(er)
-    er.save().then((re) => {
+    rp.save().then((re) => {
         res.json(R.sucRes03("教改论文添加成功"))
     }).catch(err => {
         res.json(R.errRes(err))
@@ -52,7 +51,6 @@ router.get('/query', auth, async (req, res, next) => {
     let selectYear = req.query.selectYear
     let queryCondition = {};
     if (selectYear !== 'all') {
-        console.log(selectYear)
         queryCondition.year = selectYear
     }
     if (!req.query.key) {
@@ -71,5 +69,27 @@ router.get('/query', auth, async (req, res, next) => {
         total: total,
         result: datas
     }))
+})
+// 修改
+router.post('/update', (req, res) => {
+    let doc = req.body
+    RP.updateOne({
+        _id: doc._id
+    }, doc).then(re => {
+        res.send(R.sucRes03('修改成功'))
+    }).catch(err => {
+        res.send(R.errRes(err))
+    })
+})
+// 删除
+router.get('/delete', (req, res) => {
+    let id = req.query.id
+    RP.deleteOne({
+        _id: id
+    }).then(re => {
+        res.json(R.sucRes03('删除成功'))
+    }).catch(err => {
+        res.send(R.errRes(err))
+    })
 })
 module.exports = router

@@ -13,10 +13,13 @@ var conditionRouter = require('./routes/ConditionOfMajor');
 var employmentRouter = require('./routes/EmploymentRate');
 var majorConvertRouter = require('./routes/MajorConvertRate');
 var postgraduateRouter = require('./routes/PostgraduateRate');
+var turnoutRouter = require('./routes/TurnoutRate');
 var summaryRouter = require('./routes/Summary')
 var teachingProjectProvinceRouter = require('./routes/TeachingProjectProvince')
 var researchPaperRouter = require('./routes/ResearchPaper')
 var teachingAwardRouter = require('./routes/TeachingAward')
+var studentCourseContestRouter = require('./routes/StudentCourseContest')
+var studentPaperPatentRouter = require('./routes/StudentPaperPatent')
 var engineeringProject = require('./routes/EngineeringProject')
 var excelImport = require('./routes/ExcelImport')
 
@@ -61,6 +64,9 @@ app.use('/tpp', teachingProjectProvinceRouter)
 app.use('/rp', researchPaperRouter)
 app.use('/ta', teachingAwardRouter)
 app.use('/ep', engineeringProject)
+app.use('/tr', turnoutRouter)
+app.use('/scc', studentCourseContestRouter)
+app.use('/spp', studentPaperPatentRouter)
 app.use('/import', excelImport)
 
 // catch 404 and forward to error handler

@@ -25,23 +25,18 @@ router.get("/addTestData", (req, res) => {
     });
 });
 // 添加
-router.post("/add", button.erCheckExist, (req, res) => {
+router.post("/add", auth, button.erCheckExist, (req, res) => {
     let er = new ER({
         ...req.body
     })
-    /**
-     * 检查一下该专业该年份是否存在记录
-     * 存在就不允许增加该记录
-     */
-    console.log(er)
     er.save().then((re) => {
         res.json(R.sucRes03("就业率添加成功"))
     }).catch(err => {
         res.json(R.errRes(err))
     });
 });
-// 查询
-router.get('/querytest', (req, res) => {
+// 查询测试
+router.get('/querytest', auth, (req, res) => {
     ER.find({
             major_name: '矿物加工工程',
             year: '2016'
@@ -66,7 +61,6 @@ router.get('/query', auth, async (req, res, next) => {
     let selectYear = req.query.selectYear
     let queryCondition = {};
     if (selectYear !== 'all') {
-        console.log(selectYear)
         queryCondition.year = selectYear
     }
     if (req.query.key) {
@@ -81,5 +75,27 @@ router.get('/query', auth, async (req, res, next) => {
         total: total,
         result: datas
     }))
+})
+// 修改
+router.post('/update', (req, res) => {
+    let doc = req.body
+    ER.updateOne({
+        _id: doc._id
+    }, doc).then(re => {
+        res.send(R.sucRes03('修改成功'))
+    }).catch(err => {
+        res.send(R.errRes(err))
+    })
+})
+// 删除
+router.get('/delete', auth, (req, res) => {
+    let id = req.query.id
+    ER.deleteOne({
+        _id: id
+    }).then(re => {
+        res.json(R.sucRes03('删除成功'))
+    }).catch(err => {
+        res.send(R.errRes(err))
+    })
 })
 module.exports = router;
