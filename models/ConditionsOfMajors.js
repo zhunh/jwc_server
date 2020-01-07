@@ -25,7 +25,7 @@ let condition = new db.Schema({
         required: true
     },
     teacher_num: {
-        type: Number,
+        type: String,
     },
     student_at_school: {
         type: Number,

@@ -5,7 +5,7 @@ const condition = require('../models/ConditionsOfMajors')
 const auth = require("../middlewares/auth")
 let funcs = require('../config/formatResponse')
 let R = require('../config/formatResponse')
-// 添加
+// 添加测试数据
 router.get("/addTestData", (req, res) => {
     let cd = new condition({
         // major_name

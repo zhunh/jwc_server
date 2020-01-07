@@ -151,5 +151,23 @@ router.post('/po', function (req, res, next) {
     console.log(req.body.id);
     res.send(R.sucRes02())
 });
-
+// 按学院分类，各学院专业数，major_by_academy
+router.get('/mba', async (req, res, next) => {
+    let pipeArr = [{
+            $match: {
+                post_year: 2018
+            }
+        },
+        {
+            $group: {
+                _id: "$academy",
+                'academy_count': {
+                    $sum: 1
+                }
+            }
+        }
+    ]
+    let data = await MJ.aggregate(pipeArr)
+    res.send(R.sucRes01(data))
+})
 module.exports = router;

@@ -2,20 +2,16 @@
 
 const mongoose = require('mongoose');
 //定义数据库连接地址
-const url = 'mongodb://127.0.0.1:27017/jwc'
-//连接
-// mongoose.connect(url,{ useNewUrlParser: true },function(err){
-//     if(err){
-//         console.log("数据库连接失败");
-//     }else{
-//         console.log("数据库连接成功");
-//     }
-// });
+// const url = 'mongodb://127.0.0.1:27017/jwc'
+const url = 'mongodb://172.16.214.151:27017/jwc'
+const connectOptions = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    user: 'jwc',
+    pass: 'jwc317319'
+}
 mongoose
-    .connect(url, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    })
+    .connect(url, connectOptions)
     .then(() => {
         console.log("数据库连接成功")
         // console.log(mongoose.db.connections)

@@ -8,8 +8,17 @@ const UserSchema = db.Schema({
     password: {
         type: String,
         required: true
+    },
+    role: {
+        type: String
+    },
+    desc: {
+        type: String
+    },
+    remark: {
+        type: String
     }
 })
 
-module.exports = db.model("User", UserSchema)  // 默认会操作 users 这个表
+module.exports = db.model("User", UserSchema) // 默认会操作 users 这个表
 // module.exports = db.model("User", UserSchema,"user")  设定操作第三个参数 user 的表

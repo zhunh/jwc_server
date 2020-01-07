@@ -74,4 +74,23 @@
 //         }
 //     });    
 const mj = require("./MajorBasicInfo")
-mj.find()
+let pipeArr = [{
+        $match: {
+            post_year: 2018
+        }
+    },
+    {
+        $group: {
+            _id: "$academy",
+            'academy_count': {
+                $sum: 1
+            }
+        }
+    }
+]
+mj.aggregate(pipeArr).then(re => {
+    console.log(re.length)
+    console.log(re)
+}).catch(err => {
+    console.log(err)
+})

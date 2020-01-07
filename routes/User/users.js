@@ -4,20 +4,22 @@ var router = express.Router();
 let auth = require('../../middlewares/auth')
 let R = require('../../config/formatResponse')
 let User = require('../../models/User')
-/* GET users listing. */
-router.get('/', function (req, res, next) {
-  res.send('respond with a resource');
+/* 查询. */
+router.get('/query', async function (req, res, next) {
+  let userList = await User.find({}, {
+    username: 1,
+    role: 1,
+    desc: 1,
+    remark: 1
+  })
+  res.json(R.sucRes01({
+    data: userList
+  }))
 });
 // 添加用户
-router.post('/addUser', auth, (req, res, next) => {
-  let userName = req.body.username
-  let password = req.body.password
-  console.log(req.body);
-
-  let acc = new User({
-    username: userName,
-    password: password
-  })
+router.post('/add', auth, (req, res, next) => {
+  let tmp = req.body
+  let acc = new User(tmp)
   acc.save()
     .then(() => {
       //添加成功
@@ -96,4 +98,5 @@ router.post('/login', async (req, res) => {
     }
   }
 })
+
 module.exports = router;
