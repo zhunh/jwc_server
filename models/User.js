@@ -12,7 +12,7 @@ const UserSchema = db.Schema({
     role: {
         type: String
     },
-    desc: {
+    school_id: {
         type: String
     },
     remark: {

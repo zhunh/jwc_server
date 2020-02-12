@@ -2,8 +2,8 @@
 
 const mongoose = require('mongoose');
 //定义数据库连接地址
-// const url = 'mongodb://127.0.0.1:27017/jwc'
-const url = 'mongodb://172.16.214.151:27017/jwc'
+const url = 'mongodb://127.0.0.1:27017/jwc'
+// const url = 'mongodb://172.16.214.151:27017/jwc'
 const connectOptions = {
     useNewUrlParser: true,
     useUnifiedTopology: true,

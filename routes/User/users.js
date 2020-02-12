@@ -4,16 +4,24 @@ var router = express.Router();
 let auth = require('../../middlewares/auth')
 let R = require('../../config/formatResponse')
 let User = require('../../models/User')
-/* 查询. */
+/* 查询用户列表. */
 router.get('/query', async function (req, res, next) {
   let userList = await User.find({}, {
     username: 1,
     role: 1,
-    desc: 1,
+    school_id: 1,
     remark: 1
   })
   res.json(R.sucRes01({
     data: userList
+  }))
+});
+// 按ID查询
+router.get('/queryById', async function (req, res, next) {
+  console.log(req.query.id)
+  let user = await User.findById(req.query.id)
+  res.json(R.sucRes01({
+    data: user
   }))
 });
 // 添加用户
@@ -23,16 +31,10 @@ router.post('/add', auth, (req, res, next) => {
   acc.save()
     .then(() => {
       //添加成功
-      res.send({
-        code: 0,
-        msg: 'ok'
-      })
+      res.send(R.sucRes03("添加成功"))
     })
     .catch(err => {
-      res.send({
-        code: -1,
-        msg: err.message
-      })
+      res.send(R.errRes(err))
     })
 })
 // 修改
@@ -67,7 +69,7 @@ router.post('/login', async (req, res) => {
     username
   })
   if (data) {
-    console.log('the user already exist.');
+    console.log('the user exist.');
     // 校验密码
     if (data.password == password) {
       console.log('auth sucs');
@@ -79,23 +81,20 @@ router.post('/login', async (req, res) => {
           expiresIn: "1h"
         }
       );
-      res.send({
-        code: 0,
-        msg: "login suc",
-        data: {
-          userInfo: {
-            userId: data._id,
-            username: data.username,
-          },
-          token: token
-        }
-      })
+      let tmp = {
+        userInfo: {
+          userId: data._id,
+          username: data.username,
+          role: data.role
+        },
+        token: token
+      }
+      res.send(R.sucRes01(tmp))
     } else {
-      res.send({
-        code: -1,
-        msg: '用户名或密码错误'
-      })
+      res.send(R.errRes02("密码错误"))
     }
+  } else {
+    res.send(R.errRes02("用户不存在"))
   }
 })
 

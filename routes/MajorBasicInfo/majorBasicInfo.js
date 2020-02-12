@@ -62,7 +62,7 @@ router.get('/query', auth, async (req, res, next) => {
     }))
 })
 // 修改专业名称
-router.post('/update', function (req, res, next) {
+router.post('/update', auth, function (req, res, next) {
     let id = req.body.id;
     let mjname = req.body.mjname;
     MJ.updateOne({
@@ -79,7 +79,7 @@ router.post('/update', function (req, res, next) {
         });
 })
 // 删除
-router.post('/delete', async (req, res) => {
+router.post('/delete', auth, async (req, res) => {
     // 1.获取要删除条目的id
     let idArray = req.body.ids;
     // console.log(req.body.ids);
@@ -133,7 +133,7 @@ router.post('/delete', async (req, res) => {
 /**
  * 查询专业数组，作为前端select
  */
-router.get('/majorSet', function (req, res, next) {
+router.get('/majorSet', auth, function (req, res, next) {
     MJ.find({}, {
         major_name_school: 1,
         major_code_school: 1
@@ -152,7 +152,7 @@ router.post('/po', function (req, res, next) {
     res.send(R.sucRes02())
 });
 // 按学院分类，各学院专业数，major_by_academy
-router.get('/mba', async (req, res, next) => {
+router.get('/mba', auth, async (req, res, next) => {
     let pipeArr = [{
             $match: {
                 post_year: 2018
@@ -168,6 +168,15 @@ router.get('/mba', async (req, res, next) => {
         }
     ]
     let data = await MJ.aggregate(pipeArr)
+    res.send(R.sucRes01(data))
+})
+// 查找单个学院的所有专业
+router.get('/mjs', auth, async (req, res, next) => {
+    let academy = req.query.academy
+    console.log(academy)
+    let data = await MJ.find({
+        academy: academy
+    })
     res.send(R.sucRes01(data))
 })
 module.exports = router;

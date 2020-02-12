@@ -54,7 +54,7 @@ app.all('*', function (req, res, next) {
 // 路由配置
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/table', majorRouter);
+app.use('/md', majorRouter);
 app.use('/condition', conditionRouter);
 app.use('/mcr', majorConvertRouter)
 app.use('/pr', postgraduateRouter)
